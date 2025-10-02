@@ -1,7 +1,7 @@
 from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 from googletrans import Translator
-import json  # ✅ Don't forget to import json
+import json
 
 translator = Translator()
 app = FastAPI()
@@ -14,19 +14,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.websocket("/ws")
-async def websocket_endpoint(websocket: WebSocket):
+@app.websocket("/ws/translate")  # ✅ Match frontend URL
+async def websocket_translate(websocket: WebSocket):
     await websocket.accept()
     while True:
-        try:
-            data = await websocket.receive_text()
-            print(f"Received: {data}")
-            parsed = json.loads(data)
-
-            user_text = parsed.get("text", "")
-            target_lang = parsed.get("target_lang", "hi")  # ✅ fixed key here
-
-            translated_text = translator.translate(user_text, dest=target_lang).text
-            await websocket.send_text(translated_text)
-        except Exception as e:
-            await websocket.send_text(f"Error: {str(e)}")
+        data = await websocket.receive_text()
+        payload = json.loads(data)
+        text = payload["text"]
+        target = payload["target"]  # e.g., "fr", "hi", etc.
+        translated_text = translator.translate(text, dest=target).text
+        await websocket.send_text(translated_text)
