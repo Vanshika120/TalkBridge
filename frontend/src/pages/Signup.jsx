@@ -22,8 +22,8 @@ const Signup = () => {
           Create Your Account ✨
         </h2>
         <input
-          type="text"
-          placeholder="Choose a Username"
+          type="email"
+          placeholder="Enter your email address"
           className="w-full mb-4 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-300 focus:outline-none"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
