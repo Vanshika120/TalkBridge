@@ -2,6 +2,4 @@ fastapi
 uvicorn
 googletrans==4.0.0rc1
 pydantic[email]
-setuptools
-wheel
-pip
+pip 
